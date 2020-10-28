@@ -4,6 +4,7 @@ import Form from "./form";
 class FormPage extends Form {
   state = {
     errorMessage: "",
+    successMessage: "",
   };
 
   handleChange = (event) => {
@@ -17,12 +18,12 @@ class FormPage extends Form {
   handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
+    await this.setState({ errorMessage: "", successMessage: "" });
     const requiredFields = [
       "officer-name",
       "date",
       "gender",
       "time",
-      "other-details",
     ];
     const filledFields = Object.keys(this.state);
     const allValues = requiredFields.every((value) =>
@@ -32,7 +33,8 @@ class FormPage extends Form {
       const errorMessage = "Please fill all required fields";
       return this.setState({ errorMessage });
     }
-    await this.setState({ errorMessage: "" });
+    const successMessage = "Your response has been sent. Thanks";
+    await this.setState({ successMessage });
     form.reset();
   };
 
@@ -75,7 +77,7 @@ class FormPage extends Form {
       },
       {
         label:
-          "What other important details about the incident would you like to add?",
+          "What other important details about the incident would you like to add? (optional)",
         type: "textarea",
         name: "other-details",
       },
@@ -106,6 +108,11 @@ class FormPage extends Form {
         {this.state.errorMessage && (
           <p className="alert alert-danger container my-4 mx-2">
             {this.state.errorMessage}
+          </p>
+        )}
+        {this.state.successMessage && (
+          <p className="alert alert-success container my-4 mx-2">
+            {this.state.successMessage}
           </p>
         )}
       </div>
